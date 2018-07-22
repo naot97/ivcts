@@ -1,0 +1,27 @@
+
+0004100015635001
+
+object(app\models\User)#139 (15) { ["id"]=> NULL ["name"]=> NULL ["pass"]=> NULL ["authKey"]=> NULL ["accessToken"]=> NULL ["_attributes":"yii\db\BaseActiveRecord":private]=> array(3) { ["id"]=> int(1) ["name"]=> string(4) "toan" ["pass"]=> string(4) "toan" } ["_oldAttributes":"yii\db\BaseActiveRecord":private]=> array(3) { ["id"]=> int(1) ["name"]=> string(4) "toan" ["pass"]=> string(4) "toan" } ["_related":"yii\db\BaseActiveRecord":private]=> array(0) { } ["_relationsDependencies":"yii\db\BaseActiveRecord":private]=> array(0) { } ["_errors":"yii\base\Model":private]=> NULL ["_validators":"yii\base\Model":private]=> NULL ["_scenario":"yii\base\Model":private]=> string(7) "default" ["_events":"yii\base\Component":private]=> array(0) { } ["_eventWildcards":"yii\base\Component":private]=> array(0) { } ["_behaviors":"yii\base\Component":private]=> array(0) { } }
+
+SELECT * FROM `spend_time_plan_r` WHERE periodID = 1 AND rankID IN (1,2); 
+
+SELECT * FROM (SELECT * FROM `spend_time_plan_r` WHERE periodID = 1 AND rankID IN (1,2) ) `pl` INNER JOIN `employee` `e` ON `pl`.employeeID = `e`.employeeID
+
+SELECT pl.spendTimeID,pl.effort,e.employeeID,e.levelID FROM (SELECT * FROM `spend_time_plan_r` WHERE periodID = 1 AND rankID IN (1,2) ) `pl` INNER JOIN `employee` `e` ON `pl`.employeeID = `e`.employeeID
+
+
+SELECT * FROM (SELECT pl.spendTimeID,pl.effort,e.employeeID,e.levelID FROM (SELECT * FROM `spend_time_plan_r` WHERE periodID = 1 AND rankID IN (1,2) ) `pl` INNER JOIN `employee` `e` ON `pl`.employeeID = `e`.employeeID) `p_e` INNER JOIN `level` `l` ON `p_e`.levelID = `l`.levelID
+
+SELECT * FROM (SELECT pl.effort,e.employeeID,e.levelID FROM (SELECT employeeID,sum(effort) FROM `spend_time_plan_r` WHERE periodID = 1 AND rankID IN (1,2) GROUP BY `employeeID` ) `pl` INNER JOIN `employee` `e` ON `pl`.employeeID = `e`.employeeID) `p_e` INNER JOIN `level` `l` ON `p_e`.levelID = `l`.levelID
+
+SELECT * FROM (SELECT pl.effort, e.employeeID,e.levelID FROM (SELECT employeeID,sum(effort) as effort FROM `spend_time_plan_r` WHERE periodID = 1 AND rankID IN (1,2) GROUP BY `employeeID` ) `pl` INNER JOIN `employee` `e` ON `pl`.employeeID = `e`.employeeID) `p_e` INNER JOIN `level` `l` ON `p_e`.levelID = `l`.levelID
+
+SELECT * FROM (SELECT pl.effort, e.employeeID,e.levelID FROM (SELECT employeeID,sum(effort) as effort FROM spend_time_plan_r WHERE periodID = 1 AND rankID IN (1,2) GROUP BY employeeID ) pl INNER JOIN employee e ON pl.employeeID = e.employeeID) p_e INNER JOIN level l ON p_e.levelID = l.levelID WHERE effort BETWEEN 140 AND 160
+
+SELECT * FROM 
+				(SELECT pl.effort, e.employeeID,e.levelID FROM 
+					(SELECT employeeID,sum(effort) as effort 
+					FROM spend_time_plan_r WHERE periodID = 1 AND rankID IN (1,2) GROUP BY employeeID ) pl 
+				INNER JOIN employee e ON pl.employeeID = e.employeeID) p_e 
+			INNER JOIN level l ON p_e.levelID = l.levelID 
+			WHERE effort BETWEEN 140 AND 160	
